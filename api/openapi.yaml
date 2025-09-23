@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: sync-sum-api
+  description: |
+    Сервис счетчика с REST API. Поддерживает атомарное увеличение и получение значения.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: counter
+    description: Операции со счетчиком
+paths:
+  /counter:
+    get:
+      tags: [counter]
+      summary: Получить текущее значение счетчика
+      operationId: getCounter
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterValue'
+        '500':
+          description: Внутренняя ошибка
+          content:
+            text/plain:
+              schema:
+                type: string
+  /counter/increment:
+    post:
+      tags: [counter]
+      summary: Увеличить значение счетчика на 1 (атомарно)
+      operationId: incrementCounter
+      responses:
+        '200':
+          description: Успешное увеличение, возвращает новое значение
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterValue'
+        '500':
+          description: Внутренняя ошибка
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    CounterValue:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int64
+          example: 42
+      required: [value]
+
