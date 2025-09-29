@@ -42,6 +42,7 @@ func main() {
 	counterSvc := service.NewCounterService(counterRepo)
 
 	r := chi.NewRouter()
+	r.Use(httpapi.CORS(cfg.Environment, cfg.CORS.UIDomains))
 	r.Use(httpapi.RequestLogger(logger))
 	handler := httpapi.NewCounterHandler(counterSvc, logger)
 	httpapi.RegisterRoutes(r, handler)

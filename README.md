@@ -33,6 +33,7 @@ flowchart LR
 Значения берутся из переменных окружения. Для локального запуска поддерживаются `.env` и `.env.local`.
 
 Основные переменные:
+- ENVIRONMENT (default: local) — окружение: local, stage, prod
 - HTTP_PORT (default: 8080)
 - DB_HOST (default: localhost)
 - DB_PORT (default: 5432)
@@ -42,6 +43,7 @@ flowchart LR
 - DB_SSLMODE (default: disable)
 - MIGRATIONS_DIR (default: migrations)
 - MIGRATIONS_VERSION (0 — до последней)
+- UI_DOMAINS (default: []) — массив разрешенных доменов для CORS
 
 ## Команды
 
@@ -142,6 +144,17 @@ curl http://localhost:8080/api/doc
 - `migrations` — SQL миграции
 - `api/openapi.yaml` — OpenAPI спецификация
 - `test/e2e_test.go` — e2e тесты
+
+## CORS
+Настройка CORS зависит от окружения:
+- **local**: разрешены все домены (`*`)
+- **stage/prod**: только домены из `UI_DOMAINS`
+
+Пример конфигурации для продакшена:
+```bash
+ENVIRONMENT=prod
+UI_DOMAINS=https://example.com,https://app.example.com
+```
 
 ## Безопасность инкрементов
 Используется транзакция и `SELECT ... FOR UPDATE` для блокировки строки счетчика, предотвращая потерю обновлений при конкурентных запросах и в многократных инстансах.

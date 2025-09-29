@@ -7,9 +7,12 @@ import (
 )
 
 type Config struct {
+	Environment string `envconfig:"ENVIRONMENT" default:"local"`
+
 	HTTP     HTTPConfig
 	Database DatabaseConfig
 	Migrate  MigrateConfig
+	CORS     CORSConfig
 }
 
 type HTTPConfig struct {
@@ -39,4 +42,8 @@ func Load(cfg *Config) error {
 type MigrateConfig struct {
 	Dir     string `envconfig:"MIGRATIONS_DIR" default:"migrations"`
 	Version uint   `envconfig:"MIGRATIONS_VERSION" default:"0"`
+}
+
+type CORSConfig struct {
+	UIDomains []string `envconfig:"UI_DOMAINS" default:""`
 }
